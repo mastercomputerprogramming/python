@@ -1557,32 +1557,4 @@ scores = evaluate_algorithm(dataset, stacking, n_folds)
 print('Scores: %s' % scores)
 print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
 
-# completion
-
-# prompt: a python function that performs backpropagation
-
-def backpropagation(network, row, l_rate):
-  outputs = forward_propagate(network,row)
-  expected = [0 for i in range(len(network[-1]))]
-  expected[row[-1]] = 1
-  for i in reversed(range(len(network))):
-    layer = network[i]
-    errors = list()
-    if i != len(network)-1:
-      for j in range(len(layer)):
-        error = 0.0
-        for neuron in network[i+1]:
-          error += (neuron['weights'][j] * neuron.get('delta',0))
-        errors.append(error)
-    else:
-      for j in range(len(layer)):
-        neuron = layer[j]
-        errors.append(expected[j]-neuron['output'])
-    for j in range(len(layer)):
-      neuron = layer[i]
-      neuron['delta'] = errors[j] * transfer_derivative(neuron['output'])
-      for k in range(len(neuron['weights'])):
-        neuron['weights'][k] += l_rate * neuron.get('delta',0.0) * input[k]
-      neuron['weights'][-1] += l_rate * neuron.get('delta',0.0)
-
 
